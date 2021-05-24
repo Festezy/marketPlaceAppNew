@@ -11,7 +11,7 @@ use Illuminate\Support\Str;
 class LoginController extends Controller
 {
     public function login(Request $request){
-        $email = $request->email;
+        // $email = $request->email;
         $username = $request->username;
         $password = $request->password;
 

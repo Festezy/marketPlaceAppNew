@@ -9,15 +9,13 @@ use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
-        public function store(Request $request)
-    {
+        public function store(Request $request){
         $user = $request->user();
         $productId = $request->productId;
 
         $lastProduct = $user->products()->orderBy('order_id', 'DESC')->first();
         $orderId = 1;
-        if($lastProduct)
-        {
+        if($lastProduct){
             if($lastProduct->pivot->status == 'cart')
             {
                 $orderId = $lastProduct->pivot->order_id;
@@ -40,21 +38,19 @@ class OrderController extends Controller
             'status' => 'cart'
         ]);
 
-        return response(['status' => true]);
+        return response(['Order success' => true]);
     }
 
-    public function destroy(Request $request)
-    {
+    public function destroy(Request $request){
         $user = $request->user();
         $productId = $request->productId;
 
         $user->products()->wherePivot('status', 'cart')->detach($productId);
 
-        return response(['status' => true]);
+        return response(['cart Deleted' => true]);
     }
 
-    public function cart(Request $request)
-    {
+    public function cart(Request $request){
         $user = $request->user();
 
         $cart = $user->products()->wherePivot('status', 'cart')->get();
@@ -62,8 +58,7 @@ class OrderController extends Controller
         return response(['data' => $cart]);
     }
 
-    public function history(Request $request)
-    {
+    public function history(Request $request){
         $user = $request->user();
 
         $cart = $user->products()
@@ -75,8 +70,7 @@ class OrderController extends Controller
         return response(['data' => $cart]);
     }
 
-    public function checkout(Request $request)
-    {
+    public function checkout(Request $request){
         $user = $request->user();
 
         $cart = $user->products()->wherePivot('status', 'cart')->get();
@@ -89,6 +83,6 @@ class OrderController extends Controller
                     'checkout_at' => Carbon::now()
                  ]);
         }
-        return response(['status' => true]);
+        return response(['checkout success' => true]);
     }
 }
